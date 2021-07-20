@@ -1,16 +1,21 @@
 const express = require('express');
 const morgan = require('morgan');
-const bodyParse = require('body-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const app = express();
 
 const ProductRoutes = require('./API/Routes/products');
 const OrderRoutes = require('./API/Routes/orders');
-const bodyParser = require('body-parser');
+
+//Connection with MongoDB. The password is given too.
+mongoose.connect('mongodb+srv://nodejsrestapi:' + process.env.MONGO_ATLAS_PW +'@cluster0.gjkln.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+//Removes Depreciation.
+mongoose.Promise = global.Promise;
 
 //Morgan shows the log content in the console.
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParse.json());
+app.use(bodyParser.json());
 
 //Handling the CORS errors
 app.use((req, res, next) =>{
@@ -23,6 +28,7 @@ app.use((req, res, next) =>{
      res.header('Access-Control-Allow-Origin', 'PUT, POST, PATCH, DELETE, GET');
      return res.status(200).json({});
    } 
+   next();
 });
 
 //Routes which are handling requests.
