@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 //Handling the CORS errors
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
    res.header('Access-Control-Allow-Origin', '192.168.252.37');
    res.header('Access-Control-Allow-Origin', 'Origin, X-Requested-With, Authroization, Content-Type, Accept, ');
    res.header('Access-Control-Allow-Origin', '*');
