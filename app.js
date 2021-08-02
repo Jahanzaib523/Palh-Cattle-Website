@@ -12,6 +12,7 @@ mongoose.connect('mongodb+srv://nodejsrestapi:' + process.env.MONGO_ATLAS_PW +'@
 //Removes Depreciation.
 mongoose.Promise = global.Promise;
 
+app.use('/uploads', express.static('uploads'));
 //Morgan shows the log content in the console.
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
