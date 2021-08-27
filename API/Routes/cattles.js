@@ -35,7 +35,7 @@ const upload = multer({
 
 router.get('/', (req, res, next) =>{
    Cattle.find()
-   .select('name _id description price productImage')
+   .select('type _id description price productImage')
    .exec()
    .then(result => {
        const response = {
