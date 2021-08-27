@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../Models/product');
+const Cattle = require('../Models/cattle');
 const mongoose = require('mongoose');
 const multer = require('multer');
  
@@ -34,16 +34,16 @@ const upload = multer({
 });
 
 router.get('/', (req, res, next) =>{
-   Product.find()
+   Cattle.find()
    .select('name _id description price productImage')
    .exec()
    .then(result => {
        const response = {
           count: result.length,
-          product: result.map( resul => {
+          cattle: result.map( resul => {
              return {
                 _id: resul._id,
-                name: resul.name,
+                type: resul.type,
                 description: resul.description,
                 price: resul.price,
                 productImage: resul.productImage,
@@ -65,21 +65,21 @@ router.get('/', (req, res, next) =>{
 router.post('/', upload.single('productImage'), (req, res, next) =>{
    console.log(req.file);
     //creates a product object.
-    const product = new Product({
+    const cattle = new Cattle({
           _id: mongoose.Types.ObjectId(),
-          name: req.body.name,
+          type: req.body.type,
           description: req.body.description,
           price: req.body.price,
           productImage: req.file.path
     });
 
     //Saves the product object to the Database.
-    product.save()
+    cattle.save()
     .then(result => {
         res.status(200).json({
            message: 'Product Saved to D',
-           Product: {
-              name: result.name,
+           Cattle: {
+              type: result.type,
               description: result.description,
               price: result.price,
               productImage: result.productImage,
@@ -97,23 +97,23 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
 
     res.status(200).json({
      message: "Handling POST requests in Products!",
-     Product: product
+     Cattle: cattle
     });
  });
 
 
-router.get('/:productId', (req, res, next) =>
+router.get('/:cattleId', (req, res, next) =>
 {
-   const id = req.params.productId
-   Product.findById(id)
-   .select('name _id description price productImage')
+   const id = req.params.cattleId
+   Cattle.findById(id)
+   .select('type _id description price productImage')
    .exec()
    .then(result => {
       const response = {
          count: result.length,
-         product: {
+         cattle: {
             _id: result._id,
-            name: result.name,
+            type: result.type,
             description: result.description,
             price: result.price,
             productImage: result.productImage,
@@ -142,16 +142,16 @@ router.get('/:productId', (req, res, next) =>
    });
 });
 
-router.patch('/:productId', (req, res, next) =>
+router.patch('/:cattleId', (req, res, next) =>
 {
-   const id = req.params.productId;
+   const id = req.params.cattleId;
    const updateops = {};
    for(const ops of req.body)
    {
      updateops[ops.propName] = ops.value;
    }
 
-   Product.updateOne({ _id: id }, { $set: updateops })
+   Cattle.updateOne({ _id: id }, { $set: updateops })
    .exec()
    .then(result => {
        
@@ -163,21 +163,21 @@ router.patch('/:productId', (req, res, next) =>
    });
 });
 
-router.delete('/:productId', (req, res, next) =>
+router.delete('/:cattleId', (req, res, next) =>
 {
-   const id = req.params.productId;
-   Product.remove({_id: id})
+   const id = req.params.cattleId;
+   Cattle.remove({_id: id})
    .exec()
    .then(result =>{
       res.status(200).json({
-         message: 'Product Deleted!',
+         message: 'Cattle Deleted!',
          type: 'POST',
          url: '192.168.0.100:5000',
-         data: {name: 'String', price: 'Number', description: 'String', _id: 'ObjectId'}
+         data: {type: 'String', price: 'Number', description: 'String', _id: 'ObjectId'}
       });
    })
    .catch(err => {
-    console.log("Product Could not be Removed from DB", err);
+    console.log("Cattle Could not be Removed from DB", err);
     res.status(500).json({err});
    });
 });
