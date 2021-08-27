@@ -1,6 +1,9 @@
 {
    "env":
    {
-    "MONGO_ATLAS_PW": "nodejsrestapi"
+    "MONGO_ATLAS_PW": "nodejsrestapi",
+    "TWILIO_ACCOUNT_SID": "AC4a33e7c9c9336286aeb51db3eabcdd1b", 
+    "TWILIO_AUTH_TOKEN": "b9399b27540cf44003bc299c37962523",
+    "API_KEY": "WympusciaGJDhAnWzr0b4lpatZxUrQxY"
    }
 }
