@@ -78,16 +78,19 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
     .then(result => {
         res.status(200).json({
            message: 'Product Saved to D',
-           Cattle: {
-              type: result.type,
-              description: result.description,
-              price: result.price,
-              productImage: result.productImage,
-              request: {
-                 type: 'POST',
-                 url: '192.168.0.100:5000'
-              }
-           }
+           cattle: result.map( resul => {
+            return {
+               _id: resul._id,
+               type: resul.type,
+               description: resul.description,
+               price: resul.price,
+               productImage: resul.productImage,
+               request: {
+                  type: 'GET',
+                  url: '192.168.0.100:5000'
+               }
+            }
+         })
         });
         console.log('' + result);
     })
@@ -101,6 +104,40 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
     });
  });
 
+ router.get('/:type/:min/:max', (req, res, next) =>
+ {
+    const type = req.params.type
+    const mini = req.params.min;
+    const maxi = req.params.max;
+
+    Cattle.find()
+    .select('type _id description price productImage')
+    .where('type').equals(type)
+    .where('price').gt(mini).lt(maxi)
+    .exec()
+    .then(result => {
+      console.log(result.type);
+         const response = res.status(200).json({
+            cattle: result.map( resul => {
+               return {
+                  _id: resul._id,
+                  type: resul.type,
+                  description: resul.description,
+                  price: resul.price,
+                  productImage: resul.productImage,
+                  request: {
+                     type: 'GET',
+                     url: '192.168.0.100:5000'
+                  }
+               }
+          })
+         }); 
+    })
+    .catch(err =>{
+       console.log(err);
+       res.status(500).json({error: err});
+    });
+ });
 
 router.get('/:cattleId', (req, res, next) =>
 {

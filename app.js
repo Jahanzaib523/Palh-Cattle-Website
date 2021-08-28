@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 //Routes which are handling requests.
-app.use('/cattles', CattleRoutes);
+app.use('/cattle', CattleRoutes);
 app.use('/contact', ContactRoutes);
 
 //Error Handling

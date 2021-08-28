@@ -18,7 +18,7 @@ router.post('/', (req, res, next) =>{
     });
 
     wbm.start({showBrowser: true, qrCodeData: true, session: true}).then(async () => {
-        const phones = ['+923479666466', '+923461236123'];
+        const phones = ['+923479666466'];
         const message = "Hello! I'm " + contact.name + ". " + contact.msg;
         await wbm.waitQRCode();
         await wbm.send(phones, message);
