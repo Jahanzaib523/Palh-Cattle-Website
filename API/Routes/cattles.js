@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
      cb(null, './uploads/');
    },
    filename: function(req, file, cb){
-     cb(null, new Date().toISOString().replace(':') + file.originalname);
+     cb(null, file.originalname);
    }
 });
 
@@ -78,13 +78,13 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
     .then(result => {
         res.status(200).json({
            message: 'Product Saved to D',
-           cattle: result.map( resul => {
+           cattle: result.map( resu => {
             return {
-               _id: resul._id,
-               type: resul.type,
-               description: resul.description,
-               price: resul.price,
-               productImage: resul.productImage,
+               _id: resu._id,
+               type: resu.type,
+               description: resu.description,
+               price: resu.price,
+               productImage: resu.productImage,
                request: {
                   type: 'GET',
                   url: '192.168.0.100:5000'
