@@ -3,7 +3,9 @@ const router = express.Router();
 const Cattle = require('../Models/cattle');
 const mongoose = require('mongoose');
 const multer = require('multer');
- 
+const path = require( "path" );
+var ip = require("ip");
+
 const storage = multer.diskStorage({
    destination: function(req, file, cb){
      cb(null, './uploads/');
@@ -63,7 +65,9 @@ router.get('/', (req, res, next) =>{
 });
 
 router.post('/', upload.single('productImage'), (req, res, next) =>{
-   console.log(req.file);
+
+   //gets your app's root path
+    //var root = ip.address()+ "\\" + req.file.path;
     //creates a product object.
     const cattle = new Cattle({
           _id: mongoose.Types.ObjectId(),
@@ -76,21 +80,19 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
     //Saves the product object to the Database.
     cattle.save()
     .then(result => {
-        res.status(200).json({
-           message: 'Product Saved to D',
-           cattle: result.map( resu => {
-            return {
-               _id: resu._id,
-               type: resu.type,
-               description: resu.description,
-               price: resu.price,
-               productImage: resu.productImage,
+        res.status(201).json({
+           message: 'Product Saved to DB',
+           cattle: {
+               _id: result._id,
+               type: result.type,
+               description: result.description,
+               price: result.price,
+               productImage: result.productImage,
                request: {
                   type: 'GET',
                   url: '192.168.0.100:5000'
                }
             }
-         })
         });
         console.log('' + result);
     })
@@ -98,10 +100,10 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
         console.log('Product could not be Saved to DB' + err);
     });
 
-    res.status(200).json({
+    /*res.status(201).json({
      message: "Handling POST requests in Products!",
      Cattle: cattle
-    });
+    });*/
  });
 
  router.get('/:type/:min/:max', (req, res, next) =>
@@ -117,7 +119,7 @@ router.post('/', upload.single('productImage'), (req, res, next) =>{
     .exec()
     .then(result => {
       console.log(result.type);
-         const response = res.status(200).json({
+         const response = res.status(201).json({
             cattle: result.map( resul => {
                return {
                   _id: resul._id,
@@ -164,7 +166,7 @@ router.get('/:cattleId', (req, res, next) =>
       if(result)
       {
         //console.log("ID Found in DB", result);  
-        res.status(200).json(response);
+        res.status(201).json(response);
       }
       else
       {
@@ -192,7 +194,7 @@ router.patch('/:cattleId', (req, res, next) =>
    .exec()
    .then(result => {
        
-       res.status(200).json({result});
+       res.status(201).json({result});
    })
    .catch(err =>{
         console.log(err);

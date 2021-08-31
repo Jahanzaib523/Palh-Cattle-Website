@@ -7,14 +7,13 @@ const app = express();
 
 const CattleRoutes = require('./API/Routes/cattles');
 const ContactRoutes = require('./API/Routes/contact');
-//const Uploads = require('./API/Routes/uploads');
 
 //Connection with MongoDB. The password is given too.
 mongoose.connect('mongodb+srv://nodejsrestapi:' + process.env.MONGO_ATLAS_PW +'@cluster0.gjkln.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 //Removes Depreciation.
 mongoose.Promise = global.Promise;
 
-app.use(express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 //Morgan shows the log content in the console.
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
